@@ -1,14 +1,23 @@
 import React from 'react';
-import withProps from './withProps'
 
 const MyComponent = (props) => {
-  console.log('MyComponent props:', props)
   return (
-    <div>My Component</div>
-  )
+    <input type="text" value={props.value} onChange={ (e) => props.valueChanged(e.target.value) } />
+  );
 }
 
-export default withProps(
-  { active: true, name: 'Franz' },
-  MyComponent
-)
+function withNameValid(Component) {
+	return (props) => {
+		var errorIndicator = null;
+		if(props.value.length < 7) {
+			errorIndicator = <span>Too short</span>;
+		}
+
+		return (<div>
+			<Component value={props.value} valueChanged={ props.valueChanged } />
+			{errorIndicator}
+		</div>);
+	};
+}
+
+export default withNameValid(MyComponent);
